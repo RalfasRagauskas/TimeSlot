@@ -1,4 +1,5 @@
-﻿using TimeSlot.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using TimeSlot.Data;
 using TimeSlot.Models;
 
 namespace TimeSlot.Persistence
@@ -7,30 +8,51 @@ namespace TimeSlot.Persistence
     {
         private readonly TimeSlotContext _context;
 
-        //start her
+        public BookingRepository(TimeSlotContext context)
+        {
+            _context = context;
+        }
+
+      
         public void Add(Booking booking)
         {
-            throw new NotImplementedException();
+            _context.Bookings.Add(booking);
+            _context.SaveChanges();
+              
+
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var booking = GetById(id);
+            if (booking != null)
+            {
+                _context.Bookings.Remove(booking);
+                _context.SaveChanges();
+            }
+
         }
 
         public List<Booking> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Bookings
+                  .Include(b => b.Room) // <-- Her henter EF også Room
+                  .ToList();
+
         }
 
         public Booking? GetById(int id)
         {
-            throw new NotImplementedException();
+            return _context.Bookings.FirstOrDefault(b => b.BookingId == id);
+
         }
 
         public void Update(Booking booking)
         {
-            throw new NotImplementedException();
+            _context.Bookings.Update(booking);
+            _context.SaveChanges();
+
+
         }
     }
 }

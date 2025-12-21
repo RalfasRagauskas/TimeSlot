@@ -1,32 +1,57 @@
-﻿using TimeSlot.Models;
+﻿using TimeSlot.Data;
+using TimeSlot.Models;
 
 namespace TimeSlot.Persistence
 {
     public class RoomRepository : IRoomRepository
     {
+        private readonly TimeSlotContext _context;
+
+
+        public RoomRepository(TimeSlotContext context)
+        {
+            _context = context;
+        }
+
+
         public void Add(Room room)
         {
-            throw new NotImplementedException();
+            _context.Rooms.Add(room);
+            _context.SaveChanges();
+
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var room = GetById(id);
+            if (room != null)
+            {
+                _context.Rooms.Remove(room);
+                _context.SaveChanges();
+
+
+            }
+
         }
 
         public List<Room> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Rooms.ToList();   
+            
         }
 
         public Room? GetById(int id)
         {
-            throw new NotImplementedException();
+            return _context.Rooms.FirstOrDefault(r => r.RoomId == id);
+            
         }
 
         public void Update(Room room)
         {
-            throw new NotImplementedException();
+            _context.Rooms.Update(room);
+            _context.SaveChanges();
+           
+
         }
     }
 }
