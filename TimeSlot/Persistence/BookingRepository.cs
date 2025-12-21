@@ -36,7 +36,7 @@ namespace TimeSlot.Persistence
         public List<Booking> GetAll()
         {
             return _context.Bookings
-                  .Include(b => b.Room) // <-- Her henter EF også Room
+                  .Include(b => b.Room) // Her henter EF også Room
                   .ToList();
 
         }
@@ -49,10 +49,19 @@ namespace TimeSlot.Persistence
 
         public void Update(Booking booking)
         {
-            _context.Bookings.Update(booking);
-            _context.SaveChanges();
+            // Hent først den eksisterende booking fra DB
+            var existing = _context.Bookings.FirstOrDefault(b => b.BookingId == booking.BookingId);
+            if (existing != null)
+            {
+                
+                existing.Title = booking.Title;
+                existing.StartTime = booking.StartTime;
+                existing.EndTime = booking.EndTime;
+                existing.RoomId = booking.RoomId;
 
-
+                _context.SaveChanges();
+            }
         }
+
     }
 }

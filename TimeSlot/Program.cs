@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TimeSlot.Data;
 using TimeSlot.Persistence;
+using TimeSlot.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<TimeSlotContext>(options =>
 
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<IBookingServices, BookingService>();
 
 var app = builder.Build();
 
